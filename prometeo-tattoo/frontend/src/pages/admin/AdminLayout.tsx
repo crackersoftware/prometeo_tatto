@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useAuthStore } from '../../store/authStore'
@@ -58,19 +59,44 @@ const navItems = [
 ]
 
 export default function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const { logout } = useAuth()
   const { user } = useAuthStore()
   const navigate = useNavigate()
 
+  const closeSidebar = () => setSidebarOpen(false)
+
   return (
     <div className="min-h-screen bg-[#070709] flex">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-30 md:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-56 bg-[#0d0d10] border-r border-white/5 flex flex-col fixed top-0 left-0 h-full z-40">
-        <div className="px-5 py-5 border-b border-white/5">
+      <aside
+        className={`w-56 bg-[#0d0d10] border-r border-white/5 flex flex-col fixed top-0 left-0 h-full z-40 transition-transform duration-200
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          md:translate-x-0`}
+      >
+        <div className="px-5 py-5 border-b border-white/5 flex items-center justify-between">
           <span className="font-display text-sm tracking-widest">
             <span className="text-accent">PROMETEO</span>
             <span className="text-white/60 ml-1">ADMIN</span>
           </span>
+          {/* Close button — mobile only */}
+          <button
+            onClick={closeSidebar}
+            className="md:hidden p-1 text-white/40 hover:text-white transition-colors"
+            aria-label="Cerrar menú"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
         <nav className="flex-1 px-3 py-4 space-y-0.5">
@@ -79,6 +105,7 @@ export default function AdminLayout() {
               key={item.to}
               to={item.to}
               end={item.end}
+              onClick={closeSidebar}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2 rounded text-sm transition-colors ${
                   isActive
@@ -95,7 +122,7 @@ export default function AdminLayout() {
 
         <div className="px-3 py-4 border-t border-white/5 space-y-1">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => { navigate('/'); closeSidebar() }}
             className="flex items-center gap-3 px-3 py-2 rounded text-sm text-white/40 hover:text-white hover:bg-white/5 transition-colors w-full"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -116,9 +143,19 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 ml-56 flex flex-col min-h-screen">
-        <header className="bg-[#0d0d10] border-b border-white/5 px-8 py-4 flex items-center justify-between">
-          <div />
+      <div className="flex-1 md:ml-56 flex flex-col min-h-screen">
+        <header className="bg-[#0d0d10] border-b border-white/5 px-4 md:px-8 py-4 flex items-center justify-between">
+          {/* Hamburger — mobile only */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="md:hidden p-2 text-white/40 hover:text-white transition-colors -ml-2"
+            aria-label="Abrir menú"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          <div className="hidden md:block" />
           <div className="flex items-center gap-3">
             <span className="text-sm text-white/50">{user?.name}</span>
             <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent text-xs font-bold">
@@ -126,7 +163,7 @@ export default function AdminLayout() {
             </div>
           </div>
         </header>
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 md:p-8">
           <Outlet />
         </main>
       </div>

@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Contact from './pages/Contact'
+import ComingSoon from './pages/ComingSoon'
 import NotFound from './pages/NotFound'
 import AdminRoute from './components/auth/AdminRoute'
 import AdminLayout from './pages/admin/AdminLayout'
@@ -39,6 +40,13 @@ export const router = createBrowserRouter([
       { path: 'register', element: <Register /> },
       { path: 'profile', element: <Profile /> },
       { path: 'contact', element: <Contact /> },
+      { path: 'about', element: <ComingSoon /> },
+      { path: 'terms', element: <ComingSoon /> },
+      { path: 'privacy', element: <ComingSoon /> },
+      { path: 'faq', element: <ComingSoon /> },
+      { path: 'shipping', element: <ComingSoon /> },
+      { path: 'returns', element: <ComingSoon /> },
+      { path: 'warranty', element: <ComingSoon /> },
       { path: '*', element: <NotFound /> },
     ],
   },

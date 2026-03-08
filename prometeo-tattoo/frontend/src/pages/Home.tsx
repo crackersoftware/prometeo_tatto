@@ -255,8 +255,8 @@ export default function Home() {
               <Link to="/register" className="btn-primary px-8 py-3">
                 Crear cuenta
               </Link>
-              <Link to="/shop" className="btn-secondary px-8 py-3">
-                Explorar sin cuenta
+              <Link to="/login" className="btn-secondary px-8 py-3">
+                Iniciar sesión
               </Link>
             </div>
           </div>

@@ -9,7 +9,7 @@ export default function CheckoutSuccess() {
   const orderId = params.get('external_reference')
 
   useEffect(() => {
-    document.title = 'Pago exitoso — Prometeo Tattoo'
+    document.title = '¡Gracias por tu compra! — Prometeo Tattoo'
     refreshCart()
   }, [refreshCart])
 
@@ -22,16 +22,27 @@ export default function CheckoutSuccess() {
           </svg>
         </div>
 
-        <h1 className="font-display text-3xl tracking-widest text-[#e8e8e8] mb-3">¡PAGO EXITOSO!</h1>
-        <p className="text-[#e8e8e8]/50 font-body mb-2">Tu pedido fue confirmado y está siendo procesado.</p>
+        <h1 className="font-display text-3xl tracking-widest text-[#e8e8e8] mb-4">
+          GRACIAS POR TU COMPRA
+        </h1>
+
+        <p className="font-body text-[#e8e8e8]/70 mb-2">
+          Nos estaremos contactando con vos para ultimar los detalles.
+        </p>
+        <p className="font-body text-[#e8e8e8]/40 text-sm mb-6">
+          Revisá tu email o seguí tu pedido desde tu perfil.
+        </p>
 
         {orderId && (
-          <p className="text-xs text-[#e8e8e8]/30 font-mono mb-1">Orden: {orderId.slice(0, 8)}…</p>
+          <div className="card-dark p-4 mb-6 inline-block mx-auto">
+            <p className="text-xs text-[#e8e8e8]/40 font-mono uppercase tracking-widest mb-1">Número de orden</p>
+            <p className="font-mono text-accent text-lg font-bold">#{orderId.slice(0, 8).toUpperCase()}</p>
+            {paymentId && (
+              <p className="text-xs text-[#e8e8e8]/30 font-mono mt-1">Pago: {paymentId}</p>
+            )}
+          </div>
         )}
-        {paymentId && (
-          <p className="text-xs text-[#e8e8e8]/30 font-mono mb-8">Pago: #{paymentId}</p>
-        )}
-        {!paymentId && <div className="mb-8" />}
+        {!orderId && <div className="mb-6" />}
 
         <div className="flex gap-3 justify-center">
           <Link to="/profile" className="btn-secondary">
