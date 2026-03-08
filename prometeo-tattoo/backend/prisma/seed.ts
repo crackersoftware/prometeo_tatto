@@ -426,20 +426,20 @@ async function main() {
   const configs = [
     { key: 'store_name', value: 'Prometeo Tattoo' },
     { key: 'store_description', value: 'Insumos profesionales para tatuadores' },
-    { key: 'store_phone', value: '+54 11 1234-5678' },
-    { key: 'store_email', value: 'contacto@prometeotattoo.com' },
-    { key: 'store_address', value: 'Av. Corrientes 1234, CABA' },
+    { key: 'store_phone', value: '+54 9 11 3905-0618' },
+    { key: 'store_email', value: 'prometeo.tatto@gmail.com' },
+    { key: 'store_address', value: 'Arturo Jauretche 1001, B1686 Hurlingham' },
     { key: 'free_shipping_threshold', value: '15000' },
     { key: 'shipping_cost', value: '3500' },
     { key: 'currency', value: 'ARS' },
-    { key: 'instagram_url', value: '' },
-    { key: 'whatsapp_number', value: '' },
+    { key: 'instagram_url', value: 'https://www.instagram.com/prometeo.tattoo' },
+    { key: 'whatsapp_number', value: '541139050618' },
     { key: 'announcement_bar', value: 'Envío gratis en compras mayores a $15.000' },
   ]
   for (const cfg of configs) {
     await prisma.storeConfig.upsert({
       where: { key: cfg.key },
-      update: {},
+      update: { value: cfg.value },
       create: cfg,
     })
   }

@@ -1,9 +1,17 @@
 import { useEffect } from 'react'
+import { useConfigStore } from '../store/configStore'
 
 export default function Contact() {
   useEffect(() => {
     document.title = 'Contacto — Prometeo Tattoo'
   }, [])
+
+  const config = useConfigStore((s) => s.config)
+
+  const phone = config['store_phone'] || '+54 9 11 3905-0618'
+  const email = config['store_email'] || 'prometeo.tatto@gmail.com'
+  const address = config['store_address'] || 'Arturo Jauretche 1001, B1686 Hurlingham'
+  const instagram = config['instagram_url'] || 'https://www.instagram.com/prometeo.tattoo'
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">
@@ -24,18 +32,29 @@ export default function Contact() {
               <input type="email" className="input-field" placeholder="tu@email.com" disabled />
               <input type="text" className="input-field" placeholder="Asunto" disabled />
               <textarea className="input-field h-32 resize-none" placeholder="Tu mensaje..." disabled />
-              <button className="btn-primary w-full" disabled>
-                Enviar mensaje — Fase 4
-              </button>
+              <a
+                href={`mailto:${email}`}
+                className="btn-primary w-full flex items-center justify-center gap-2"
+              >
+                Escribinos por email
+              </a>
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary w-full flex items-center justify-center gap-2"
+              >
+                Instagram — @prometeo.tattoo
+              </a>
             </div>
           </div>
 
           {/* Info */}
           <div className="space-y-4">
             {[
-              { icon: '📍', title: 'Dirección', value: 'Av. Corrientes 1234, Buenos Aires, Argentina' },
-              { icon: '📞', title: 'Teléfono', value: '+54 11 1234-5678' },
-              { icon: '📧', title: 'Email', value: 'hola@prometeo.tattoo' },
+              { icon: '📍', title: 'Dirección', value: address },
+              { icon: '📞', title: 'Teléfono', value: phone },
+              { icon: '📧', title: 'Email', value: email },
               { icon: '🕐', title: 'Horarios', value: 'Lun–Vie 9:00–18:00\nSáb 10:00–14:00' },
             ].map((item) => (
               <div key={item.title} className="card-dark p-5 flex gap-4">

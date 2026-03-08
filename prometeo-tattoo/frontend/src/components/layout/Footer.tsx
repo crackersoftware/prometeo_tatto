@@ -47,15 +47,14 @@ export default function Footer() {
             </p>
             {/* Social links */}
             <div className="flex gap-3 mt-4">
-              {['ig', 'fb', 'tw'].map((s) => (
-                <a
-                  key={s}
-                  href="#"
-                  className="w-8 h-8 rounded border border-border flex items-center justify-center text-[#e8e8e8]/40 hover:text-accent hover:border-accent transition-colors text-xs font-mono uppercase"
-                >
-                  {s}
-                </a>
-              ))}
+              <a
+                href="https://www.instagram.com/prometeo.tattoo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded border border-border flex items-center justify-center text-[#e8e8e8]/40 hover:text-accent hover:border-accent transition-colors text-xs font-mono uppercase"
+              >
+                ig
+              </a>
             </div>
           </div>
 
