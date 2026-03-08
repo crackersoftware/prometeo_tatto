@@ -157,7 +157,7 @@ export default function AdminDashboard() {
             <YAxis tick={{ fill: '#ffffff30', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={formatPriceShort} />
             <Tooltip
               contentStyle={{ backgroundColor: '#111114', border: '1px solid #ffffff10', borderRadius: 6, fontSize: 12 }}
-              formatter={(v) => [formatPrice(v as number), 'Ingresos']}
+              formatter={(v: unknown) => [formatPrice(v as number), 'Ingresos']}
             />
             <Area type="monotone" dataKey="revenue" stroke="#c62828" strokeWidth={2} fill="url(#revenueGrad)" />
           </AreaChart>
