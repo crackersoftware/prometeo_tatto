@@ -1,0 +1,6 @@
+prometeo-tattoo/backend/node_modules
+prometeo-tattoo/backend/dist
+prometeo-tattoo/frontend/node_modules
+prometeo-tattoo/frontend/dist
+prometeo-tattoo/frontend/.env
+prometeo-tattoo/backend/.env
