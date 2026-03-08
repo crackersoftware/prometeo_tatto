@@ -1,18 +1,41 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Product } from '../../types/product'
 import { formatPrice } from '../../utils/formatPrice'
+import { useCart } from '../../hooks/useCart'
+import { useAuthStore } from '../../store/authStore'
 
 const PLACEHOLDER =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%231a1a1a'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='14' fill='%23444' text-anchor='middle' dominant-baseline='middle'%3ESin imagen%3C/text%3E%3C/svg%3E"
 
 interface ProductCardProps {
   product: Product
-  onAddToCart?: (product: Product) => void
 }
 
-export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
+  const [adding, setAdding] = useState(false)
+  const [added, setAdded] = useState(false)
+  const { addItem } = useCart()
+  const { isAuthenticated } = useAuthStore()
+  const navigate = useNavigate()
+
   const outOfStock = product.stock === 0
   const mainImage = product.images?.[0] || PLACEHOLDER
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!isAuthenticated) { navigate('/login'); return }
+    setAdding(true)
+    try {
+      await addItem(product.id, 1)
+      setAdded(true)
+      setTimeout(() => setAdded(false), 2000)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setAdding(false)
+    }
+  }
 
   return (
     <div className="group relative card-dark overflow-hidden hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all duration-200 flex flex-col">
@@ -87,11 +110,11 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         </div>
 
         <button
-          className="btn-primary w-full py-2 text-sm mt-3"
-          disabled={outOfStock}
-          onClick={() => onAddToCart?.(product)}
+          className={`btn-primary w-full py-2 text-sm mt-3 ${added ? 'bg-green-700 hover:bg-green-700' : ''}`}
+          disabled={outOfStock || adding}
+          onClick={handleAddToCart}
         >
-          {outOfStock ? 'Sin stock' : 'Agregar al carrito'}
+          {added ? '¡Agregado!' : adding ? 'Agregando...' : outOfStock ? 'Sin stock' : 'Agregar al carrito'}
         </button>
       </div>
     </div>

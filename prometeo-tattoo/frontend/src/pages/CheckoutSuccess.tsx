@@ -48,7 +48,7 @@ export default function CheckoutSuccess() {
           <Link to="/profile" className="btn-secondary">
             Ver mis órdenes
           </Link>
-          <Link to="/shop" className="btn-primary">
+          <Link to="/" className="btn-primary">
             Seguir comprando
           </Link>
         </div>
