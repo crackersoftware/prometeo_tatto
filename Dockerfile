@@ -2,8 +2,9 @@ FROM node:20-alpine
 RUN apk add --no-cache openssl
 WORKDIR /app
 
-# Instalar dependencias
+# Instalar dependencias (prisma/ necesario antes de npm ci por postinstall)
 COPY prometeo-tattoo/backend/package*.json ./
+COPY prometeo-tattoo/backend/prisma ./prisma
 RUN npm ci
 
 # Copiar código fuente
