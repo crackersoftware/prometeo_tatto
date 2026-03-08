@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+.pnp
+.pnp.js
+
+# Secrets — NUNCA commitear
+.env
+.env.*
+!.env.example
+
+# Builds
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Coverage / tests
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Prisma
+*.db
+*.db-journal
+
+# Backups y archivos temporales
+*.zip
