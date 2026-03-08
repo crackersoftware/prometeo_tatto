@@ -101,7 +101,7 @@ export default function AdminDashboard() {
               <Tooltip
                 contentStyle={{ backgroundColor: '#111114', border: '1px solid #ffffff10', borderRadius: 6, fontSize: 12 }}
                 labelStyle={{ color: '#ffffff80' }}
-                formatter={(v: number) => [formatPrice(v), 'Ingresos']}
+                formatter={(v: unknown) => [formatPrice(v as number), 'Ingresos']}
               />
               <Bar dataKey="revenue" fill="#c62828" radius={[3, 3, 0, 0]} />
             </BarChart>
@@ -125,14 +125,15 @@ export default function AdminDashboard() {
                   layout="vertical"
                   align="right"
                   verticalAlign="middle"
-                  formatter={(value, entry) => {
-                    const item = stats.salesByCategory.find(c => c.category === value)
-                    return <span style={{ color: '#ffffff70', fontSize: 11 }}>{value} {item ? `${item.percentage}%` : ''}</span>
+                  formatter={(value: unknown) => {
+                    const label = value as string
+                    const item = stats.salesByCategory.find(c => c.category === label)
+                    return <span style={{ color: '#ffffff70', fontSize: 11 }}>{label} {item ? `${item.percentage}%` : ''}</span>
                   }}
                 />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#111114', border: '1px solid #ffffff10', borderRadius: 6, fontSize: 12 }}
-                  formatter={(v: number) => [formatPrice(v), 'Ingresos']}
+                  formatter={(v: unknown) => [formatPrice(v as number), 'Ingresos']}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -152,11 +153,11 @@ export default function AdminDashboard() {
               </linearGradient>
             </defs>
             <XAxis dataKey="date" tick={{ fill: '#ffffff30', fontSize: 9 }} axisLine={false} tickLine={false}
-              tickFormatter={(v) => v.slice(5)} interval={4} />
+              tickFormatter={(v: string) => v.slice(5)} interval={4} />
             <YAxis tick={{ fill: '#ffffff30', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={formatPriceShort} />
             <Tooltip
               contentStyle={{ backgroundColor: '#111114', border: '1px solid #ffffff10', borderRadius: 6, fontSize: 12 }}
-              formatter={(v: number) => [formatPrice(v), 'Ingresos']}
+              formatter={(v) => [formatPrice(v as number), 'Ingresos']}
             />
             <Area type="monotone" dataKey="revenue" stroke="#c62828" strokeWidth={2} fill="url(#revenueGrad)" />
           </AreaChart>
