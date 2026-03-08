@@ -17,4 +17,4 @@ RUN npm run build
 EXPOSE 4000
 
 # Correr migraciones y luego iniciar el servidor
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy; node dist/server.js"]
