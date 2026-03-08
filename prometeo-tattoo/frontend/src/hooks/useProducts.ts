@@ -4,11 +4,10 @@ import { productService } from '../services/productService'
 
 const EMPTY: ProductsResponse = { products: [], total: 0, page: 1, totalPages: 0 }
 
-export function useProducts(initialFilters: ProductFilters = {}) {
+export function useProducts(filters: ProductFilters = {}) {
   const [data, setData] = useState<ProductsResponse>(EMPTY)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [filters, setFilters] = useState<ProductFilters>(initialFilters)
 
   const fetchProducts = useCallback(async (currentFilters: ProductFilters) => {
     setLoading(true)
@@ -25,15 +24,19 @@ export function useProducts(initialFilters: ProductFilters = {}) {
 
   useEffect(() => {
     fetchProducts(filters)
-  }, [filters, fetchProducts])
-
-  const updateFilters = useCallback((newFilters: Partial<ProductFilters>) => {
-    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }))
-  }, [])
-
-  const setPage = useCallback((page: number) => {
-    setFilters((prev) => ({ ...prev, page }))
-  }, [])
+  // Los filtros vienen de la URL (Shop.tsx), comparamos cada campo por separado
+  // para evitar que un objeto nuevo con los mismos valores dispare un fetch extra
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    filters.category,
+    filters.brand,
+    filters.search,
+    filters.sort,
+    filters.page,
+    filters.minPrice,
+    filters.maxPrice,
+    fetchProducts,
+  ])
 
   return {
     products: data.products,
@@ -42,9 +45,6 @@ export function useProducts(initialFilters: ProductFilters = {}) {
     totalPages: data.totalPages,
     loading,
     error,
-    filters,
-    updateFilters,
-    setPage,
   }
 }
 
