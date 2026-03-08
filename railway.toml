@@ -1,7 +1,6 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "prometeo-tattoo/backend/Dockerfile"
-buildContext = "prometeo-tattoo/backend"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 healthcheckPath = "/health"
