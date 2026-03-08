@@ -12,6 +12,7 @@ export default function Contact() {
   const email = config['store_email'] || 'prometeo.tatto@gmail.com'
   const address = config['store_address'] || 'Arturo Jauretche 1001, B1686 Hurlingham'
   const instagram = config['instagram_url'] || 'https://www.instagram.com/prometeo.tattoo'
+  const whatsapp = config['whatsapp_number'] || '541139050618'
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">
@@ -37,6 +38,15 @@ export default function Contact() {
                 className="btn-primary w-full flex items-center justify-center gap-2"
               >
                 Escribinos por email
+              </a>
+              <a
+                href={`https://wa.me/${whatsapp}?text=Hola%2C%20quiero%20consultar%20sobre%20un%20producto`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary w-full flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#25D366', borderColor: '#25D366', color: '#fff' }}
+              >
+                Escribinos por WhatsApp
               </a>
               <a
                 href={instagram}
