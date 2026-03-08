@@ -11,7 +11,7 @@ export default function CheckoutSuccess() {
   useEffect(() => {
     document.title = '¡Gracias por tu compra! — Prometeo Tattoo'
     refreshCart()
-  }, [refreshCart])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">

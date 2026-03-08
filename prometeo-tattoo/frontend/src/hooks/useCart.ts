@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useCartStore } from '../store/cartStore'
 import { useAuthStore } from '../store/authStore'
 import * as cartService from '../services/cartService'
@@ -32,12 +32,12 @@ export function useCart() {
     setCart(updated)
   }
 
-  const refreshCart = async () => {
+  const refreshCart = useCallback(async () => {
     if (isAuthenticated) {
       const updated = await cartService.getCart()
       setCart(updated)
     }
-  }
+  }, [isAuthenticated, setCart])
 
   return {
     cart,
