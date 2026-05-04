@@ -4,8 +4,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // directUrl es necesario para prisma migrate cuando DATABASE_URL apunta al pooler de Supabase (puerto 6543)
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -51,6 +53,9 @@ model Product {
   orderItems   OrderItem[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+
+  @@index([categoryId])
+  @@index([featured])
 }
 
 model Cart {
@@ -84,6 +89,9 @@ model Order {
   mpPaymentId String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }
 
 enum OrderStatus {
@@ -102,7 +110,7 @@ model OrderItem {
   productId String
   quantity  Int
   price     Float
-  name      String  @default("")
+  name      String
 }
 
 model StoreConfig {

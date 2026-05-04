@@ -4,10 +4,6 @@ import * as orderService from '../services/orderService'
 export const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { address, phone, notes } = req.body
-    if (!address) {
-      res.status(400).json({ error: true, message: 'address es requerido' })
-      return
-    }
     const order = await orderService.createOrder(req.user!.userId, address, phone, notes)
     res.status(201).json(order)
   } catch (err) {

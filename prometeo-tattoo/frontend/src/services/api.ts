@@ -8,32 +8,27 @@ const api = axios.create({
   },
 })
 
-// Agregar JWT de authStore a cada request
 api.interceptors.request.use((config) => {
-  try {
-    const raw = localStorage.getItem('prometeo-auth')
-    if (raw) {
-      const { state } = JSON.parse(raw)
-      if (state?.token) {
-        config.headers.Authorization = `Bearer ${state.token}`
-      }
-    }
-  } catch {
-    // ignorar errores de parse
+  const token = useAuthStore.getState().token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
   return config
 })
 
-// Manejo global de errores
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       useAuthStore.getState().logout()
     }
-    const message =
-      error.response?.data?.message || error.message || 'Error de conexión'
-    return Promise.reject(new Error(message))
+    const responseData = error.response?.data
+    const message = responseData?.message || error.message || 'Error de conexión'
+    const apiError = Object.assign(new Error(message), {
+      errors: responseData?.errors as Record<string, string> | undefined,
+      statusCode: error.response?.status as number | undefined,
+    })
+    return Promise.reject(apiError)
   },
 )
 

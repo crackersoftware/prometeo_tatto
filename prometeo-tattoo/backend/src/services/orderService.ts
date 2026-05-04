@@ -1,5 +1,4 @@
 import { prisma } from '../config/prisma'
-import { clearCart } from './cartService'
 
 async function getShippingConfig(): Promise<{ threshold: number; cost: number }> {
   const configs = await prisma.storeConfig.findMany({
@@ -33,29 +32,29 @@ export async function createOrder(
     throw err
   }
 
-  // Verificar stock de todos los items antes de crear la orden
-  for (const item of cart.items) {
-    if (item.product.stock < item.quantity) {
-      const err: Error & { statusCode?: number } = new Error(
-        `Stock insuficiente para "${item.product.name}". Disponible: ${item.product.stock}`,
-      )
-      err.statusCode = 409
-      throw err
-    }
-  }
-
   const subtotal = cart.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
   const { threshold, cost } = await getShippingConfig()
   const shippingCost = calcShipping(subtotal, threshold, cost)
   const total = subtotal + shippingCost
 
   const order = await prisma.$transaction(async (tx) => {
-    // Decrementar stock de cada producto
+    // Descuento atómico: solo actualiza si hay stock suficiente
     for (const item of cart.items) {
-      await tx.product.update({
-        where: { id: item.productId },
+      const result = await tx.product.updateMany({
+        where: { id: item.productId, stock: { gte: item.quantity } },
         data: { stock: { decrement: item.quantity } },
       })
+      if (result.count === 0) {
+        const current = await tx.product.findUnique({
+          where: { id: item.productId },
+          select: { stock: true },
+        })
+        const err: Error & { statusCode?: number } = new Error(
+          `Stock insuficiente para "${item.product.name}". Disponible: ${current?.stock ?? 0}`,
+        )
+        err.statusCode = 409
+        throw err
+      }
     }
 
     const newOrder = await tx.order.create({
@@ -79,10 +78,11 @@ export async function createOrder(
       },
     })
 
+    // Limpiar carrito dentro de la misma transacción
+    await tx.cartItem.deleteMany({ where: { cart: { userId } } })
+
     return newOrder
   })
-
-  await clearCart(userId)
 
   return order
 }

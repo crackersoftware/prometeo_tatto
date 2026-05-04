@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
 import { env } from './config/env'
 import { router } from './routes/index'
 import { errorHandler } from './middlewares/errorHandler'
@@ -25,6 +26,16 @@ app.use(
 )
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: true, message: 'Demasiados intentos. Esperá 15 minutos.' },
+})
+app.use('/api/auth/login', authLimiter)
+app.use('/api/auth/register', authLimiter)
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })

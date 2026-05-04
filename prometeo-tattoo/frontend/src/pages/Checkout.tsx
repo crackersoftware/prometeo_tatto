@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
 import { useAuthStore } from '../store/authStore'
@@ -45,6 +45,7 @@ export default function Checkout() {
   const [shipping, setShipping] = useState<ShippingData>({ address: '', phone: '', notes: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const submittingRef = useRef(false)
   const { cart, total, itemCount } = useCart()
   const { isAuthenticated } = useAuthStore()
   const { config } = useConfigStore()
@@ -69,6 +70,8 @@ export default function Checkout() {
   }
 
   const handleConfirm = async () => {
+    if (submittingRef.current) return
+    submittingRef.current = true
     setLoading(true)
     setError('')
     try {
@@ -95,6 +98,7 @@ export default function Checkout() {
       const msg = err instanceof Error ? err.message : 'Error al crear la orden'
       setError(msg)
     } finally {
+      submittingRef.current = false
       setLoading(false)
     }
   }
