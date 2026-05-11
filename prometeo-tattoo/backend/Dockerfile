@@ -2,11 +2,11 @@ FROM node:20-alpine
 RUN apk add --no-cache openssl
 WORKDIR /app
 
-# Instalar dependencias sin correr postinstall (prisma generate necesita el schema)
+# Instalar dependencias (incluyendo dev para tsc y prisma CLI)
 COPY package*.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci
 
-# Copiar código fuente (incluye prisma/schema.prisma)
+# Copiar código fuente
 COPY . .
 
 # Generar cliente Prisma y compilar TypeScript
